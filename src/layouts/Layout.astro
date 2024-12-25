@@ -143,8 +143,8 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
             <footer>
               <div>
                 <span>Powered by&nbsp;</span>
-                <a href="https://github.com/otoyo/astro-notion-blog"
-                  >astro-notion-blog</a
+                <a href="https://github.com/nemumusito/astro-notion-blog"
+                  >しとちゃぶろぐ！</a
                 >
               </div>
             </footer>
@@ -199,13 +199,11 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     order: 1;
     width: 300px;
     padding: 25px 20px;
-    background-color: rgba(255, 209, 220, 0.15);
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: var(--radius);
     margin: 20px;
     box-shadow: 0 4px 15px rgba(255, 183, 197, 0.1);
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 183, 197, 0.1);
+    border: 3px solid rgba(255, 183, 197, 0.2);
   }
   @media (max-width: 640px) {
     aside {
@@ -239,15 +237,12 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   }
 
   div.content {
-    padding: 25px 40px;
-    background-color: rgba(255, 255, 255, 0.95);
+    padding: 30px 40px;
+    background-color: #ffffff;
     border-radius: var(--radius);
-    box-shadow:
-      0 8px 30px rgba(255, 183, 197, 0.15),
-      0 0 0 1px rgba(255, 183, 197, 0.05);
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(255, 183, 197, 0.15);
     margin: 20px;
+    border: 3px solid rgba(255, 183, 197, 0.2);
   }
   @media (max-width: 640px) {
     div.content {
@@ -257,18 +252,32 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   }
 
   main header {
-    padding: 25px 0 20px;
+    padding: 30px 0 25px;
     text-align: center;
+    position: relative;
+  }
+  main header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accents-2), transparent);
+    border-radius: var(--radius);
   }
   main header h1 {
     font-weight: 700;
-    color: var(--fg);
-    background: linear-gradient(45deg, #ff6b98, #ff8fab);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 1px 1px 2px rgba(252, 96, 143, 0.397);
-    letter-spacing: 0.03em;
-    font-weight: 700;
+    font-size: 2.5rem;
+    color: #ff6b98;
+    text-shadow:
+      1px 1px 0 #fff,
+      -1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+      1px -1px 0 #fff;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
   }
   main header h1 a {
     display: block;
@@ -300,8 +309,21 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   }
 
   main header div.description {
-    padding: 0.3rem 0 0.6rem;
+    padding: 0.8rem 0;
     font-size: 0.95rem;
+    color: var(--accents-1);
+    line-height: 1.6;
+    max-width: 80%;
+    margin: 0 auto;
+    position: relative;
+  }
+  main header div.description::before,
+  main header div.description::after {
+    content: '✿';
+    color: var(--accents-2);
+    opacity: 0.6;
+    margin: 0 0.5rem;
+    font-size: 0.8em;
   }
 
   main footer {
@@ -330,15 +352,16 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     --gap: 1rem;
     --gap-double: 2rem;
 
-    --bg: #fff9fb;
+    --bg: #fff5f8;
     --fg: #4a4a4a;
     --accents-1: #ff8fa3;
     --accents-2: #ffb7c5;
     --accents-3: #ffd1dc;
+    --accents-4: #ffe4ea;
     --geist-foreground: #4a4a4a;
     --geist-success: #95d5b2;
 
-    --radius: 12px;
+    --radius: 16px;
 
     --font-sans: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
       'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
@@ -366,8 +389,8 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     font-family: var(--font-sans);
 
     background-image:
-      radial-gradient(rgba(255, 183, 197, 0.1) 1px, transparent 1px),
-      radial-gradient(rgba(255, 183, 197, 0.1) 1px, transparent 1px);
+      radial-gradient(rgba(255, 183, 197, 0.12) 1.5px, transparent 1.5px),
+      radial-gradient(rgba(255, 183, 197, 0.12) 1.5px, transparent 1.5px);
     background-position: 0 0, 25px 25px;
     background-attachment: fixed;
     background-size: 50px 50px;
@@ -389,8 +412,9 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   a {
     color: var(--accents-1);
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    padding: 0 2px;
   }
   a:hover {
     color: var(--accents-2);
@@ -398,12 +422,32 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   a:not(.no-decoration):hover::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: -1px;
     left: 0;
     width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accents-2), var(--accents-3));
-    border-radius: var(--radius);
+    height: 4px;
+    background: linear-gradient(90deg,
+      rgba(255, 139, 163, 0.3),
+      rgba(255, 183, 197, 0.6),
+      rgba(255, 139, 163, 0.3)
+    );
+    border-radius: 4px;
+    animation: linkShine 1.5s ease-in-out infinite;
+  }
+
+  @keyframes linkShine {
+    0% {
+      opacity: 0.6;
+      transform: scaleX(0.9);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scaleX(1);
+    }
+    100% {
+      opacity: 0.6;
+      transform: scaleX(0.9);
+    }
   }
 
   mark {

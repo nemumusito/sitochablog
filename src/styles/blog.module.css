@@ -17,17 +17,38 @@
 .post {
   margin: 0 auto 40px;
   padding: 25px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(255, 183, 197, 0.2);
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 20px;
+  box-shadow:
+    0 4px 15px rgba(255, 183, 197, 0.2),
+    0 0 0 2px rgba(255, 183, 197, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.post::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent, rgba(255, 183, 197, 0.1));
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .post:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px) scale(1.01);
   border-color: rgba(255, 183, 197, 0.3);
-  box-shadow: 0 8px 25px rgba(255, 183, 197, 0.25);
+  box-shadow:
+    0 10px 30px rgba(255, 183, 197, 0.25),
+    0 0 0 3px rgba(255, 183, 197, 0.1);
+}
+
+.post:hover::before {
+  opacity: 1;
 }
 
 .post h2 {
@@ -54,18 +75,41 @@
 /* カテゴリータグのスタイル */
 :global(.category-tag) {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
+  padding: 6px 14px;
+  border-radius: 25px;
   font-size: 0.85rem;
   color: #ff4081;
-  background: rgba(255, 64, 129, 0.1);
-  border: 1px solid rgba(255, 64, 129, 0.2);
-  transition: all 0.2s ease;
-  margin: 0 4px 4px 0;
+  background: rgba(255, 64, 129, 0.08);
+  border: 1.5px solid rgba(255, 64, 129, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 6px 6px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+:global(.category-tag::before) {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255, 64, 129, 0.15), transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.3s ease;
 }
 
 :global(.category-tag:hover) {
-  background: rgba(255, 64, 129, 0.15);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(255, 64, 129, 0.15);
+  background: rgba(255, 64, 129, 0.12);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 4px 12px rgba(255, 64, 129, 0.2),
+    0 0 0 2px rgba(255, 64, 129, 0.1);
+  letter-spacing: 0.02em;
+}
+
+:global(.category-tag:hover::before) {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
 }
