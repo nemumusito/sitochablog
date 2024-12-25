@@ -80,7 +80,7 @@
   font-size: 0.85rem;
   color: #ff4081;
   background: rgba(255, 64, 129, 0.08);
-  border: 1.5px solid rgba(255, 64, 129, 0.15);
+  border: 3px solid rgba(255, 64, 129, 0.15);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin: 0 6px 6px 0;
   position: relative;
