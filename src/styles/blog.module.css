@@ -1,11 +1,13 @@
 .main header {
   padding: 0 0 20px;
 }
+
 .main footer {
-  border-top: 1px dashed #888;
+  border-top: 1px dashed #ffb7c5;
   margin: 0 auto;
   padding: 40px 0 0;
 }
+
 @media (max-width: 640px) {
   .main footer {
     margin: 0 auto 40px;
@@ -14,9 +16,48 @@
 
 .post {
   margin: 0 auto 40px;
+  padding: 25px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(255, 183, 197, 0.2);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
+
+.post:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 183, 197, 0.3);
+  box-shadow: 0 8px 25px rgba(255, 183, 197, 0.25);
+}
+
+.post h2 {
+  background: linear-gradient(45deg, #ff4081, #ff6b98);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
 .post footer {
-  margin-top: 0.5rem;
+  margin-top: 0.8rem;
   padding: 0;
   border: 0;
+}
+
+/* カテゴリータグのスタイル */
+:global(.category-tag) {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #ff4081;
+  background: rgba(255, 64, 129, 0.1);
+  border: 1px solid rgba(255, 64, 129, 0.2);
+  transition: all 0.2s ease;
+  margin: 0 4px 4px 0;
+}
+
+:global(.category-tag:hover) {
+  background: rgba(255, 64, 129, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 64, 129, 0.15);
 }

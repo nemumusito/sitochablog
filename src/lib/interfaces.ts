@@ -1,14 +1,14 @@
 export interface Database {
   Title: string
   Description: string
-  Icon: FileObject | Emoji | null
+  Icon: IconType | null
   Cover: FileObject | null
 }
 
 export interface Post {
   PageId: string
   Title: string
-  Icon: FileObject | Emoji | null
+  Icon: IconType | null
   Cover: FileObject | null
   Slug: string
   Date: string
@@ -96,7 +96,7 @@ export interface ToDo {
 
 export interface Image {
   Caption: RichText[]
-  Type: string
+  Type: 'file' | 'external'
   File?: FileObject
   External?: External
   Width?: number
@@ -105,22 +105,34 @@ export interface Image {
 
 export interface Video {
   Caption: RichText[]
-  Type: string
+  Type: 'external'
   External?: External
 }
 
 export interface File {
   Caption: RichText[]
-  Type: string
+  Type: 'file' | 'external'
   File?: FileObject
   External?: External
 }
 
 export interface FileObject {
-  Type: string
+  Type: 'file'
   Url: string
   ExpiryTime?: string
 }
+
+export interface ExternalFile {
+  Type: 'external'
+  Url: string
+}
+
+export interface Emoji {
+  Type: 'emoji'
+  Emoji: string
+}
+
+export type IconType = FileObject | ExternalFile | Emoji
 
 export interface External {
   Url: string
@@ -144,7 +156,7 @@ export interface Equation {
 
 export interface Callout {
   RichTexts: RichText[]
-  Icon: FileObject | Emoji | null
+  Icon: IconType | null
   Color: string
   Children?: Block[]
 }
@@ -226,11 +238,6 @@ export interface RichText {
 export interface Text {
   Content: string
   Link?: Link
-}
-
-export interface Emoji {
-  Type: string
-  Emoji: string
 }
 
 export interface Annotation {

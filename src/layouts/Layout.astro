@@ -26,25 +26,31 @@ const siteOGImage = new URL(
   Astro.site
 )
 
-let coverImageURL: string
+let coverImageURL: string | undefined
 if (database.Cover) {
-  if (database.Cover.Type === 'external') {
-    coverImageURL = database.Cover.Url
-  } else if (database.Cover.Type === 'file') {
-    try {
-      coverImageURL = filePath(new URL(database.Cover.Url))
-    } catch (err) {
-      console.log('Invalid DB cover image URL')
-    }
+  const cover = database.Cover as { Type: 'external' | 'file'; Url: string }
+  switch (cover.Type) {
+    case 'external':
+      coverImageURL = cover.Url
+      break
+    case 'file':
+      try {
+        coverImageURL = filePath(new URL(cover.Url))
+      } catch (err) {
+        console.log('Invalid DB cover image URL')
+      }
+      break
   }
 }
 
-let customIconURL: string
-if (database.Icon && database.Icon.Type === 'file') {
-  try {
-    customIconURL = filePath(new URL(database.Icon.Url))
-  } catch (err) {
-    console.log('Invalid DB custom icon URL')
+let customIconURL: string | undefined
+if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
+  if (database.Icon.Type === 'file') {
+    try {
+      customIconURL = filePath(new URL(database.Icon.Url))
+    } catch (err) {
+      console.log('Invalid DB custom icon URL')
+    }
   }
 }
 ---
@@ -57,6 +63,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     <meta charset="UTF-8" />
     <meta name="generator" content={Astro.generator} />
     <title>{siteTitle}</title>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
     <meta name="description" content={siteDescription} />
     <link rel="canonical" href={siteURL} />
     <meta property="og:url" content={siteURL} />
@@ -95,25 +102,29 @@ if (database.Icon && database.Icon.Type === 'file') {
               <h1>
                 <a href={getNavLink('/')}>
                   {
-                    database.Icon && database.Icon.Type === 'emoji' ? (
-                      <>
-                        <span>{database.Icon.Emoji}</span>
-                        {database.Title}
-                      </>
-                    ) : database.Icon && database.Icon.Type === 'external' ? (
-                      <>
-                        <img src={database.Icon.Url} alt="Site icon image" />
-                        {database.Title}
-                      </>
-                    ) : database.Icon && database.Icon.Type === 'file' ? (
-                      <>
-                        <img
-                          src={customIconURL}
-                          class="custom-icon"
-                          alt="Site icon image"
-                        />
-                        {database.Title}
-                      </>
+                    database.Icon && 'Type' in database.Icon ? (
+                      database.Icon.Type === 'emoji' && 'Emoji' in database.Icon ? (
+                        <>
+                          <span>{database.Icon.Emoji}</span>
+                          {database.Title}
+                        </>
+                      ) : database.Icon.Type === 'external' && 'Url' in database.Icon ? (
+                        <>
+                          <img src={database.Icon.Url} alt="Site icon image" />
+                          {database.Title}
+                        </>
+                      ) : database.Icon.Type === 'file' && customIconURL ? (
+                        <>
+                          <img
+                            src={customIconURL}
+                            class="custom-icon"
+                            alt="Site icon image"
+                          />
+                          {database.Title}
+                        </>
+                      ) : (
+                        database.Title
+                      )
                     ) : (
                       database.Title
                     )
@@ -162,6 +173,8 @@ if (database.Icon && database.Icon.Type === 'file') {
   .container > div {
     display: flex;
     max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   @media (max-width: 640px) {
     .container > div {
@@ -183,48 +196,83 @@ if (database.Icon && database.Icon.Type === 'file') {
   aside {
     order: 1;
     width: 300px;
-    padding: 20px 20px;
-    background-color: #f4f4f4;
+    padding: 25px 20px;
+    background-color: rgba(255, 209, 220, 0.3);
+    border-radius: var(--radius);
+    margin: 20px;
+    box-shadow: 0 4px 15px rgba(255, 183, 197, 0.15);
+    backdrop-filter: blur(5px);
   }
   @media (max-width: 640px) {
     aside {
       order: 2;
       width: 100%;
+      margin: 10px 0;
     }
   }
 
   div.cover {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  div.cover::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--bg) 100%);
+    z-index: 1;
   }
   div.cover img {
     display: block;
     width: 100%;
-    height: 20vh;
+    height: 25vh;
     object-fit: cover;
     object-position: center 60%;
+    border-bottom: 3px solid rgba(255, 183, 197, 0.3);
   }
 
   div.content {
-    padding: 20px 40px;
+    padding: 25px 40px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 30px rgba(255, 183, 197, 0.15);
+    backdrop-filter: blur(5px);
+    margin: 20px;
   }
   @media (max-width: 640px) {
     div.content {
-      padding: 0 18px;
+      padding: 20px;
+      margin: 10px;
     }
   }
 
   main header {
-    padding: 20px 0 20px;
+    padding: 25px 0 20px;
+    text-align: center;
   }
   main header h1 {
     font-weight: 700;
-    color: #333;
+    color: var(--fg);
+    background: linear-gradient(45deg, #e91e63, #ff4081);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow:
+      0 0 1px rgba(233, 30, 99, 0.3),
+      2px 2px 3px rgba(233, 30, 99, 0.2);
+    letter-spacing: 0.03em;
+    font-weight: 800;
   }
   main header h1 a {
     display: block;
     color: inherit;
+    transition: transform 0.2s ease;
   }
   main header h1 a:hover {
     color: inherit;
+    transform: scale(1.02);
   }
   main header h1 a span,
   main header h1 a img {
@@ -277,17 +325,17 @@ if (database.Icon && database.Icon.Type === 'file') {
     --gap: 1rem;
     --gap-double: 2rem;
 
-    --bg: #fff;
-    --fg: #333;
-    --accents-1: #666;
-    --accents-2: #666;
-    --accents-3: #666;
-    --geist-foreground: #000;
-    --geist-success: #690;
+    --bg: #fff9fb;
+    --fg: #4a4a4a;
+    --accents-1: #ff8fa3;
+    --accents-2: #ffb7c5;
+    --accents-3: #ffd1dc;
+    --geist-foreground: #4a4a4a;
+    --geist-success: #95d5b2;
 
-    --radius: 4px;
+    --radius: 12px;
 
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    --font-sans: 'M PLUS Rounded 1c', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
       'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
       'Helvetica Neue', sans-serif;
     --font-mono: SFMono-Regular, Menlo, Consolas, 'PT Mono', 'Liberation Mono',
@@ -308,15 +356,13 @@ if (database.Icon && database.Icon.Type === 'file') {
 
   body {
     min-height: 100vh;
-    background: var(--bg);
+    background: linear-gradient(135deg, var(--bg), #fff2f5);
     color: var(--fg);
-    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      Helvetica, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
-      'Hiragino Sans GB', メイリオ, Meiryo, 'Apple Color Emoji', Arial,
-      sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: var(--font-sans);
 
-    /*background-image: radial-gradient(#ddd 1px, transparent 1px),
-      radial-gradient(#ddd 1px, transparent 1px);*/
+    background-image:
+      radial-gradient(rgba(255, 183, 197, 0.1) 1px, transparent 1px),
+      radial-gradient(rgba(255, 183, 197, 0.1) 1px, transparent 1px);
     background-position: 0 0, 25px 25px;
     background-attachment: fixed;
     background-size: 50px 50px;
@@ -338,15 +384,27 @@ if (database.Icon && database.Icon.Type === 'file') {
   a {
     color: var(--accents-1);
     text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
   }
   a:hover {
-    color: var(--accents-1);
+    color: var(--accents-2);
+  }
+  a:not(.no-decoration):hover::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accents-2), var(--accents-3));
+    border-radius: var(--radius);
   }
 
   mark {
     padding: var(--gap-quarter);
     border-radius: var(--radius);
-    background: rgba(247, 212, 255, 0.8);
+    background: linear-gradient(120deg, rgba(255, 209, 220, 0.4), rgba(247, 212, 255, 0.4));
   }
 
   h1 {
