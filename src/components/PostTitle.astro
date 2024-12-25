@@ -1,5 +1,5 @@
 ---
-import { Post } from '../lib/interfaces.ts'
+import type { Post } from '../lib/interfaces.ts'
 import { getPostLink } from '../lib/blog-helpers.ts'
 
 export interface Props {
@@ -56,11 +56,15 @@ let title = post.Title
     padding: 0.2rem 0;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--fg);
+    color: #333;
   }
   .post-title a {
     font-size: 1.6rem;
-    color: inherit;
+    color: #333;
+    transition: color 0.2s ease;
+  }
+  .post-title a:hover {
+    color: #ff4081;
   }
   .post-title span,
   .post-title img {

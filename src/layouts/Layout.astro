@@ -199,19 +199,13 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     order: 1;
     width: 300px;
     padding: 25px 20px;
-    background-color: rgba(255, 209, 220, 0.35);
-    background-image: linear-gradient(
-      to bottom right,
-      rgba(255, 255, 255, 0.8),
-      rgba(255, 209, 220, 0.3)
-    );
+    background-color: rgba(255, 209, 220, 0.15);
     border-radius: var(--radius);
     margin: 20px;
-    box-shadow:
-      0 4px 15px rgba(255, 183, 197, 0.15),
-      0 0 0 1px rgba(255, 183, 197, 0.05);
+    box-shadow: 0 4px 15px rgba(255, 183, 197, 0.1);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 183, 197, 0.1);
   }
   @media (max-width: 640px) {
     aside {
@@ -269,22 +263,12 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   main header h1 {
     font-weight: 700;
     color: var(--fg);
-    color: #e91e63;
-    background: linear-gradient(45deg, #e91e63, #ff4081);
-    background-clip: text;
+    background: linear-gradient(45deg, #ff6b98, #ff8fab);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow:
-      0 0 1px rgba(233, 30, 99, 0.3),
-      1px 1px 2px rgba(233, 30, 99, 0.2);
+    text-shadow: 1px 1px 2px rgba(252, 96, 143, 0.397);
     letter-spacing: 0.03em;
-    font-weight: 800;
-    /* フォールバック */
-    @supports not (background-clip: text) {
-      background: none;
-      -webkit-text-fill-color: initial;
-      color: #e91e63;
-    }
+    font-weight: 700;
   }
   main header h1 a {
     display: block;
