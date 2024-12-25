@@ -101,25 +101,34 @@
 </style>
 
 <script>
+  import type { FeedItem, DOMElement, SearchInput, ListItem, ResultsList, ClickableElement } from '../lib/search-types'
+
   document.addEventListener('DOMContentLoaded', async () => {
-    let feedItems = []
+    let feedItems: FeedItem[] = []
     let fetched = false
 
     async function openModal() {
-      document.querySelector('.search-modal-container').style.display = 'block'
-      document.querySelector('.search-prompt input').focus()
+      const container = document.querySelector('.search-modal-container') as DOMElement
+      const input = document.querySelector('.search-prompt input') as SearchInput
+      if (container && input) {
+        container.style.display = 'block'
+        input.focus()
 
-      if (!fetched) {
-        await fetchRSS()
+        if (!fetched) {
+          await fetchRSS()
+        }
+        searchAndRender()
       }
-      searchAndRender()
     }
 
     function closeModal() {
-      document.querySelector('.search-modal-container').style.display = 'none'
+      const container = document.querySelector('.search-modal-container') as DOMElement
+      if (container) {
+        container.style.display = 'none'
+      }
     }
 
-    function handleKeydown(event) {
+    function handleKeydown(event: KeyboardEvent) {
       if (event.keyCode === 13) {
         // Enter
         select()
@@ -138,62 +147,78 @@
     }
 
     function select() {
-      const a = document.querySelector('.search-result ul > li.selected a')
-      a.click()
+      const a = document.querySelector('.search-result ul > li.selected a') as ClickableElement
+      if (a) {
+        a.click()
+      }
     }
 
     function selectFirst() {
-      const li = document.querySelector('.search-result ul > li:first-child')
+      const li = document.querySelector('.search-result ul > li:first-child') as ListItem
       if (li) {
         li.classList.add('selected')
       }
     }
 
-    function selectUp(event) {
+    function selectUp(event: Event) {
       event.preventDefault()
 
-      const ul = document.querySelector('.search-result ul')
+      const ul = document.querySelector('.search-result ul') as ResultsList
+      if (!ul) return
+
       const selected = ul.querySelector('.selected')
       if (selected) {
         selected.classList.remove('selected')
 
         if (selected.previousElementSibling) {
           selected.previousElementSibling.classList.add('selected')
-        } else {
+        } else if (ul.lastElementChild) {
           ul.lastElementChild.classList.add('selected')
         }
-      } else {
+      } else if (ul.lastElementChild) {
         ul.lastElementChild.classList.add('selected')
       }
     }
 
-    function selectDown(event) {
+    function selectDown(event: Event) {
       event.preventDefault()
 
-      const ul = document.querySelector('.search-result ul')
+      const ul = document.querySelector('.search-result ul') as ResultsList
+      if (!ul) return
+
       const selected = ul.querySelector('.selected')
       if (selected) {
         selected.classList.remove('selected')
 
         if (selected.nextElementSibling) {
           selected.nextElementSibling.classList.add('selected')
-        } else {
+        } else if (ul.firstElementChild) {
           ul.firstElementChild.classList.add('selected')
         }
-      } else {
+      } else if (ul.firstElementChild) {
         ul.firstElementChild.classList.add('selected')
       }
     }
 
-    function handleMouseover(event) {
-      Array.from(event.target.closest('ul').children).forEach((element) => {
+    function handleMouseover(event: MouseEvent) {
+      const target = event.target as HTMLElement
+      const ul = target.closest('ul')
+      if (!ul) return
+
+      Array.from(ul.children).forEach((element) => {
         element.classList.remove('selected')
       })
-      event.target.closest('li').classList.add('selected')
+      const li = target.closest('li')
+      if (li) {
+        li.classList.add('selected')
+      }
     }
 
     function searchAndRender() {
-      const text = document.querySelector('.search-prompt input').value.trim()
+      const input = document.querySelector('.search-prompt input') as SearchInput
+      if (!input) return
+
+      const text = input.value.trim()
 
       if (text !== '') {
         const results = search(text)
@@ -205,8 +230,8 @@
       selectFirst()
     }
 
-    function search(query) {
-      const results = []
+    function search(query: string): FeedItem[] {
+      const results: FeedItem[] = []
       feedItems.forEach((item) => {
         if (item.title.includes(query) || item?.description?.includes(query)) {
           results.push(item)
@@ -215,8 +240,10 @@
       return results
     }
 
-    function renderResults(results) {
-      const ul = document.querySelector('.search-result ul')
+    function renderResults(results: FeedItem[]) {
+      const ul = document.querySelector('.search-result ul') as ResultsList
+      if (!ul) return
+
       ul.innerHTML = ''
 
       results.forEach((item) => {
@@ -228,7 +255,7 @@
         title.classList.add('search-result-title')
         title.textContent = item.title
         description.classList.add('search-result-description')
-        description.textContent = item.description
+        description.textContent = item.description || ''
         a.href = item.link
 
         li.addEventListener('mouseover', handleMouseover)
@@ -257,32 +284,41 @@
       const parser = new DOMParser()
       const xml = parser.parseFromString(body, 'text/xml')
 
-      Array.from(xml.getElementsByTagName('item')).forEach((item) => {
-        const title = item.getElementsByTagName('title')[0].textContent
-        const link = item.getElementsByTagName('link')[0].textContent
-        const description =
-          item.getElementsByTagName('description')[0]?.textContent
-        const pubDate = item.getElementsByTagName('pubDate')[0].textContent
+      Array.from(xml.getElementsByTagName('item')).forEach((item: Element) => {
+        const titleElement = item.getElementsByTagName('title')[0]
+        const linkElement = item.getElementsByTagName('link')[0]
+        const descriptionElement = item.getElementsByTagName('description')[0]
+        const pubDateElement = item.getElementsByTagName('pubDate')[0]
 
-        feedItems.push({
-          title,
-          link,
-          description,
-          pubDate,
-        })
+        const title = titleElement?.textContent
+        const link = linkElement?.textContent
+        const description = descriptionElement?.textContent
+        const pubDate = pubDateElement?.textContent
+
+        if (title && link && pubDate) {
+          feedItems.push({
+            title,
+            link,
+            description: description || undefined,
+            pubDate,
+          })
+        }
       })
 
       fetched = true
     }
 
-    Array.from(document.getElementsByClassName('open-search-modal')).forEach(
-      (element) => {
-        element.addEventListener('click', openModal)
-      }
-    )
-    document
-      .getElementsByClassName('overlay')[0]
-      .addEventListener('click', closeModal)
+    // イベントリスナーの設定
+    const searchButtons = Array.from(document.getElementsByClassName('open-search-modal'))
+    searchButtons.forEach((element: Element) => {
+      element.addEventListener('click', openModal)
+    })
+
+    const overlay = document.querySelector('.overlay') as HTMLElement | null
+    if (overlay) {
+      overlay.addEventListener('click', closeModal)
+    }
+
     document.addEventListener('keydown', handleKeydown)
   })
 </script>
