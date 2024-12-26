@@ -63,7 +63,8 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     <meta charset="UTF-8" />
     <meta name="generator" content={Astro.generator} />
     <title>{siteTitle}</title>
-    <link rel="icon" type="image/x-icon" href={getStaticFilePath('/images/icon.ico')} />
+    <link rel="icon" type="image/x-icon" href="/images/icon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/icon.ico" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2289997872727258" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
