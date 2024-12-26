@@ -243,12 +243,14 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     box-shadow: 0 4px 15px rgba(255, 183, 197, 0.15);
     margin: 20px;
     border: 3px solid rgba(255, 183, 197, 0.2);
-    min-width: 430px;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
   @media (max-width: 640px) {
     div.content {
       padding: 20px;
       margin: 10px;
+      width: calc(100% - 20px);
     }
   }
 
@@ -279,11 +281,15 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
       1px -1px 0 #fff;
     letter-spacing: 0.02em;
     margin-bottom: 0.5rem;
+    word-wrap: break-word;
+    max-width: 100%;
   }
   main header h1 a {
-    display: block;
+    display: inline-block;
     color: inherit;
     transition: transform 0.2s ease;
+    word-break: keep-all;
+    max-width: 100%;
   }
   main header h1 a:hover {
     color: inherit;
@@ -314,9 +320,13 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     font-size: 0.95rem;
     color: var(--accents-1);
     line-height: 1.6;
-    max-width: 80%;
+    max-width: 100%;
     margin: 0 auto;
     position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   main header div.description::before,
   main header div.description::after {
@@ -374,6 +384,11 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   * {
     box-sizing: border-box;
     word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
   }
 
   html,
@@ -466,7 +481,12 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
 
   @media (max-width: 640px) {
     h1 {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
+      padding: 0 0.5rem;
+    }
+    main header div.description {
+      font-size: 0.85rem;
+      padding: 0.6rem 0.5rem;
     }
   }
 
