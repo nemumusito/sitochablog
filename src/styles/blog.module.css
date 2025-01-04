@@ -22,9 +22,15 @@
   box-shadow:
     0 4px 15px rgba(255, 183, 197, 0.2),
     0 0 0 2px rgba(255, 183, 197, 0.05);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
   position: relative;
   overflow: hidden;
+  user-select: text;
+  pointer-events: auto;
+}
+
+.post * {
+  pointer-events: auto;
 }
 
 .post::before {
@@ -37,14 +43,20 @@
   background: linear-gradient(135deg, transparent, rgba(255, 183, 197, 0.1));
   opacity: 0;
   transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.post > * {
+  position: relative;
+  z-index: 1;
 }
 
 .post:hover {
-  transform: translateY(-5px) scale(1.01);
   border-color: rgba(255, 183, 197, 0.3);
   box-shadow:
-    0 10px 30px rgba(255, 183, 197, 0.25),
-    0 0 0 3px rgba(255, 183, 197, 0.1);
+    0 6px 20px rgba(255, 183, 197, 0.2),
+    0 0 0 2px rgba(255, 183, 197, 0.1);
 }
 
 .post:hover::before {
@@ -81,10 +93,11 @@
   color: #ff4081;
   background: rgba(255, 64, 129, 0.08);
   border: 3px solid rgba(255, 64, 129, 0.15);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.3s ease, box-shadow 0.3s ease, letter-spacing 0.3s ease;
   margin: 0 6px 6px 0;
   position: relative;
   overflow: hidden;
+  user-select: text;
 }
 
 :global(.category-tag::before) {
@@ -98,11 +111,17 @@
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+:global(.category-tag > *) {
+  position: relative;
+  z-index: 1;
 }
 
 :global(.category-tag:hover) {
   background: rgba(255, 64, 129, 0.12);
-  transform: translateY(-2px) scale(1.05);
   box-shadow:
     0 4px 12px rgba(255, 64, 129, 0.2),
     0 0 0 2px rgba(255, 64, 129, 0.1);
