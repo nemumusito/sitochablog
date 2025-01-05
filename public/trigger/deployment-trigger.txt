@@ -1,0 +1,2 @@
+This file is used to trigger Cloudflare deployments.
+Last updated: Initial setup
