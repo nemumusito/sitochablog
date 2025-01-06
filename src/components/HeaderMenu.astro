@@ -9,15 +9,17 @@ import { getNavLink } from '../lib/blog-helpers.ts'
       <span class="hamburger"></span>
     </button>
     <nav class="menu-items">
-      <a href="#" class="menu-link">
-        <span>📝</span>ブログ
-      </a>
-      <a href="#" class="menu-link">
-        <span>✨</span>タグ
-      </a>
-      <a href="#" class="menu-link">
-        <span>💭</span>About
-      </a>
+      <div class="social-links">
+        <a href="https://x.com/nemumusitocha" class="social-link" aria-label="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://www.youtube.com/@nemumusito" class="social-link" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://github.com/nemumusito" class="social-link" aria-label="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
     </nav>
   </div>
 </header>
@@ -77,7 +79,29 @@ import { getNavLink } from '../lib/blog-helpers.ts'
 
   .menu-items {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 1.5rem;
+  }
+
+  .menu-left {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .social-link {
+    color: var(--accents-1);
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+
+  .social-link:hover {
+    color: var(--accents-2);
   }
 
   .menu-link {
@@ -167,6 +191,18 @@ import { getNavLink } from '../lib/blog-helpers.ts'
       transition: right 0.3s ease;
       border-left: 3px solid rgba(255, 140, 66, 0.2);
       box-shadow: -2px 0 8px rgba(255, 140, 66, 0.1);
+    }
+
+    .menu-left {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .social-links {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 140, 66, 0.2);
+      justify-content: center;
     }
 
     .menu-items.active {
