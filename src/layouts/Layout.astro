@@ -215,7 +215,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     order: 1;
     width: 280px;
     padding: 25px 20px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.93);
     border-radius: var(--radius);
     box-shadow: 0 4px 15px rgba(255, 140, 66, 0.1);
     border: 3px solid rgba(255, 140, 66, 0.2);
@@ -245,7 +245,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   }
   div.content {
     padding: 30px 40px;
-    background-color: rgba(255, 255, 255, 0.97);
+    background-color: rgba(255, 251, 245, 0.849);
     border-radius: var(--radius);
     box-shadow: 
       0 4px 15px rgba(255, 140, 66, 0.15),
@@ -254,6 +254,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     overflow-wrap: break-word;
     position: relative;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   @media (max-width: 640px) {
     div.cover {
@@ -423,11 +424,13 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   body {
     min-height: 100vh;
     background: 
-      linear-gradient(135deg, var(--bg), #fff7e6),
+      linear-gradient(135deg, rgba(255, 241, 211, 0.568), rgba(255, 242, 214, 0.705)),
       url('/src/images/background.jpg') center/cover no-repeat fixed;
     color: var(--fg);
     font-family: var(--font-sans);
-    background-blend-mode: soft-light;
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
