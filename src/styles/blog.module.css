@@ -14,14 +14,6 @@
   }
 }
 
-body {
-  background-image: url('/src/images/background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  min-height: 100vh;
-}
-
 .post {
   margin: 0 auto 40px;
   padding: 25px;

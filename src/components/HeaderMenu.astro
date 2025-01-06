@@ -1,0 +1,197 @@
+---
+import { getNavLink } from '../lib/blog-helpers.ts'
+---
+
+<header class="header-menu">
+  <div class="header-menu-content">
+    <a href={getNavLink('/')} class="site-title">しとちゃぶろぐ</a>
+    <button class="menu-toggle" aria-label="メニューを開く">
+      <span class="hamburger"></span>
+    </button>
+    <nav class="menu-items">
+      <a href="#" class="menu-link">
+        <span>📝</span>ブログ
+      </a>
+      <a href="#" class="menu-link">
+        <span>✨</span>タグ
+      </a>
+      <a href="#" class="menu-link">
+        <span>💭</span>About
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const menuToggle = document.querySelector('.menu-toggle');
+  const menuItems = document.querySelector('.menu-items');
+  
+  menuToggle?.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    menuItems?.classList.toggle('active');
+  });
+</script>
+
+<style>
+  .header-menu {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: rgba(255, 248, 240, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 3px solid rgba(255, 140, 66, 0.2);
+    box-shadow: 0 2px 8px rgba(255, 140, 66, 0.1);
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    
+  }
+
+  .header-menu-content {
+    max-width: 1120px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .site-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ff8c42;
+    transition: color 0.3s ease;
+    letter-spacing: 0.02em;
+    text-shadow: 
+      1px 1px 0 #fff,
+      -1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+      1px -1px 0 #fff;
+  }
+
+  .site-title:hover {
+    color: #ffb347;
+  }
+
+  .menu-items {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #ff8c42;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .menu-link:hover {
+    color: #ffb347;
+  }
+
+  .menu-link span {
+    font-size: 1.1em;
+  }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    position: relative;
+    z-index: 1000;
+  }
+
+  .hamburger {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--accents-1);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background: var(--accents-1);
+    transition: all 0.3s ease;
+  }
+
+  .hamburger::before {
+    top: -8px;
+  }
+
+  .hamburger::after {
+    bottom: -8px;
+  }
+
+  .menu-toggle.active .hamburger {
+    background: transparent;
+  }
+
+  .menu-toggle.active .hamburger::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+
+  .menu-toggle.active .hamburger::after {
+    transform: rotate(-45deg);
+    bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+
+    .menu-items {
+      position: fixed;
+      top: var(--header-height);
+      right: -100%;
+      width: 250px;
+      height: calc(100vh - var(--header-height));
+      background: rgba(255, 251, 245, 0.98);
+      flex-direction: column;
+      gap: 0;
+      padding: 20px;
+      transition: right 0.3s ease;
+      border-left: 3px solid rgba(255, 140, 66, 0.2);
+      box-shadow: -2px 0 8px rgba(255, 140, 66, 0.1);
+    }
+
+    .menu-items.active {
+      right: 0;
+    }
+
+    .menu-link {
+      font-size: 1rem;
+      padding: 15px;
+      width: 100%;
+      border-bottom: 1px solid rgba(255, 140, 66, 0.1);
+    }
+
+    .menu-link:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .header-menu-content {
+      padding: 0 10px;
+    }
+
+    .site-title {
+      font-size: 1.1rem;
+    }
+  }
+</style>

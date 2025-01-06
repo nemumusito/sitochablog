@@ -6,6 +6,7 @@ import '../styles/syntax-coloring.css'
 import GoogleAnalytics from '../components/GoogleAnalytics.astro'
 import SearchModal from '../components/SearchModal.astro'
 import SearchButton from '../components/SearchButton.astro'
+import HeaderMenu from '../components/HeaderMenu.astro'
 
 export interface Props {
   title: string
@@ -72,66 +73,65 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   </head>
   <body>
     <GoogleAnalytics trackingId={PUBLIC_GA_TRACKING_ID} />
-    <div class="container">
-      <div class="main-container">
-        <aside>
-          <SearchButton />
-          <slot name="aside" />
-        </aside>
+    <HeaderMenu />
+    <div class="main-container">
+      <aside>
+        <SearchButton />
+        <slot name="aside" />
+      </aside>
 
-        <main>
-          <div class="content">
-            <header>
-              <h1>
-                <a href={getNavLink('/')}>
-                  {
-                    database.Icon && 'Type' in database.Icon ? (
-                      database.Icon.Type === 'emoji' && 'Emoji' in database.Icon ? (
-                        <>
-                          <span>{database.Icon.Emoji}</span>
-                          {database.Title}
-                        </>
-                      ) : database.Icon.Type === 'external' && 'Url' in database.Icon ? (
-                        <>
-                          <img src={database.Icon.Url} alt="Site icon image" />
-                          {database.Title}
-                        </>
-                      ) : database.Icon.Type === 'file' && customIconURL ? (
-                        <>
-                          <img
-                            src={customIconURL}
-                            class="custom-icon"
-                            alt="Site icon image"
-                          />
-                          {database.Title}
-                        </>
-                      ) : (
-                        database.Title
-                      )
+      <main>
+        <div class="content">
+          <header>
+            <h1>
+              <a href={getNavLink('/')}>
+                {
+                  database.Icon && 'Type' in database.Icon ? (
+                    database.Icon.Type === 'emoji' && 'Emoji' in database.Icon ? (
+                      <>
+                        <span>{database.Icon.Emoji}</span>
+                        {database.Title}
+                      </>
+                    ) : database.Icon.Type === 'external' && 'Url' in database.Icon ? (
+                      <>
+                        <img src={database.Icon.Url} alt="Site icon image" />
+                        {database.Title}
+                      </>
+                    ) : database.Icon.Type === 'file' && customIconURL ? (
+                      <>
+                        <img
+                          src={customIconURL}
+                          class="custom-icon"
+                          alt="Site icon image"
+                        />
+                        {database.Title}
+                      </>
                     ) : (
                       database.Title
                     )
-                  }
-                </a>
-              </h1>
-              <div class="description">
-                {database.Description}
-              </div>
-            </header>
+                  ) : (
+                    database.Title
+                  )
+                }
+              </a>
+            </h1>
+            <div class="description">
+              {database.Description}
+            </div>
+          </header>
 
-            <slot name="main" />
+          <slot name="main" />
 
-            <footer>
-              <div>
-                <span>Powered by&nbsp;</span>
-                <a href="https://github.com/nemumusito/astro-notion-blog"
-                  >しとちゃぶろぐ！</a
-                >
-              </div>
-            </footer>
-          </div>
-        </main>
-      </div>
+          <footer>
+            <div>
+              <span>Powered by&nbsp;</span>
+              <a href="https://github.com/nemumusito/astro-notion-blog"
+                >しとちゃぶろぐ！</a
+              >
+            </div>
+          </footer>
+        </div>
+      </main>
     </div>
 
     <SearchModal />
@@ -144,8 +144,30 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
 </html>
 
 <style>
-  .container {
+  :root {
+    --header-height: 50px;
+  }
+
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+  }
+
+  body {
     min-height: 100vh;
+    background: 
+      linear-gradient(135deg, rgba(255, 241, 211, 0.568), rgba(255, 242, 214, 0.705)),
+      url('/src/images/background.jpg') center/cover no-repeat fixed;
+    color: var(--fg);
+    font-family: var(--font-sans);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
   }
 
   .main-container {
@@ -154,14 +176,20 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     margin: 0 auto;
     gap: 30px;
     align-items: flex-start;
-    padding: 80px 20px 40px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
   }
 
   @media (max-width: 900px) {
+    :root {
+      --header-height: 45px;
+    }
+
     .main-container {
       flex-direction: column;
       gap: 20px;
-      padding: 80px 10px 40px;
+      padding: 20px 10px;
     }
   }
 
@@ -186,13 +214,14 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     box-shadow: 0 4px 15px rgba(255, 140, 66, 0.1);
     border: 3px solid rgba(255, 140, 66, 0.2);
     position: sticky;
-    top: 80px;
+    top: calc(var(--header-height) + 20px);
   }
   @media (max-width: 900px) {
     aside {
       order: 2;
       width: 100%;
       position: static;
+      margin-top: -20px;
     }
   }
   
@@ -328,6 +357,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
 
 <style is:global>
   :root {
+    --header-height: 50px;
     --gap-quarter: 0.25rem;
     --gap-half: 0.5rem;
     --gap: 1rem;
@@ -359,28 +389,6 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     -webkit-hyphens: auto;
     -ms-hyphens: auto;
     hyphens: auto;
-  }
-
-  html,
-  body {
-    padding: 0;
-    margin: 0;
-    font-size: 16px;
-  }
-
-  body {
-    min-height: 100vh;
-    background: 
-      linear-gradient(135deg, rgba(255, 241, 211, 0.568), rgba(255, 242, 214, 0.705)),
-      url('/src/images/background.jpg') center/cover no-repeat fixed;
-    color: var(--fg);
-    font-family: var(--font-sans);
-    background-blend-mode: luminosity;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust: 100%;
   }
 
   figure {
@@ -442,6 +450,12 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     color: var(--fg);
     font-size: 2rem;
     font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    :root {
+      --header-height: 45px;
+    }
   }
 
   @media (max-width: 640px) {
