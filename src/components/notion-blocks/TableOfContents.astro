@@ -18,6 +18,8 @@ const { block, headings } = Astro.props
       const heading =
         headingBlock.Heading1 || headingBlock.Heading2 || headingBlock.Heading3
 
+      if (!heading) return null
+
       let indentClass = ''
       if (headingBlock.Type === 'heading_2') {
         indentClass = 'indent-1'
@@ -25,12 +27,12 @@ const { block, headings } = Astro.props
         indentClass = 'indent-2'
       }
 
+      const color = block.TableOfContents?.Color || 'default'
+
       return (
         <a
           href={`#${buildHeadingId(heading)}`}
-          class={`table-of-contents ${snakeToKebab(
-            block.TableOfContents.Color
-          )} ${indentClass}`}
+          class={`table-of-contents-link ${snakeToKebab(color)} ${indentClass}`}
         >
           {heading.RichTexts.map(
             (richText: interfaces.RichText) => richText.PlainText
@@ -41,23 +43,97 @@ const { block, headings } = Astro.props
   }
 </div>
 
-<style>
-  .table-of-contents {
+<style is:global>
+  .post-body .table-of-contents {
+    background: rgba(255, 251, 243, 0.95);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 800px;
+    border: 3px solid rgba(255, 183, 197, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 183, 197, 0.15);
+    position: relative;
+    z-index: 1;
   }
-  .table-of-contents > a {
+
+  @media (max-width: 640px) {
+    .post-body .table-of-contents {
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 100%;
+    }
+    .post-body .table-of-contents::before {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+    .post-body .table-of-contents .table-of-contents-link {
+      font-size: 0.85rem;
+      padding: 0.2rem 0.8rem;
+    }
+    .post-body .table-of-contents .table-of-contents-link.indent-1 {
+      padding-left: 2rem;
+    }
+    .post-body .table-of-contents .table-of-contents-link.indent-2 {
+      padding-left: 3rem;
+    }
+  }
+  .post-body .table-of-contents::before {
+    content: "目次";
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--accents-1);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px dashed rgba(255, 183, 197, 0.3);
+  }
+  .post-body .table-of-contents .table-of-contents-link {
     display: block;
     line-height: 1.8rem;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 500;
-    text-decoration: underline;
+    text-decoration: none;
+    color: var(--fg);
+    padding: 0.3rem 1rem;
+    border-radius: 8px;
+    margin: 0.3rem 0;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
   }
-  .table-of-contents > a:hover {
-    background: rgba(241, 241, 239, 1) !important;
+  .post-body .table-of-contents .table-of-contents-link:hover {
+    background: rgba(255, 183, 197, 0.1) !important;
+    color: var(--accents-1);
+    transform: translateX(5px);
+    border-color: rgba(255, 183, 197, 0.15);
   }
-  .table-of-contents > a.indent-1 {
-    padding-left: 1.5rem;
+  .post-body .table-of-contents .table-of-contents-link.indent-1 {
+    padding-left: 2.5rem;
+    font-size: 0.88rem;
+    position: relative;
   }
-  .table-of-contents > a.indent-2 {
-    padding-left: 3rem;
+  .post-body .table-of-contents .table-of-contents-link.indent-1::before {
+    content: "";
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 1px;
+    background: rgba(255, 183, 197, 0.4);
+  }
+  .post-body .table-of-contents .table-of-contents-link.indent-2 {
+    padding-left: 4rem;
+    font-size: 0.85rem;
+    color: #666;
+    position: relative;
+  }
+  .post-body .table-of-contents .table-of-contents-link.indent-2::before {
+    content: "";
+    position: absolute;
+    left: 2.7rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 1px;
+    background: rgba(255, 183, 197, 0.3);
   }
 </style>

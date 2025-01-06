@@ -3,7 +3,7 @@
 }
 
 .main footer {
-  border-top: 1px dashed #ffb7c5;
+  border-top: 1px dashed #FFD1A3;
   margin: 0 auto;
   padding: 40px 0 0;
 }
@@ -14,15 +14,23 @@
   }
 }
 
+body {
+  background-image: url('/src/images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
 .post {
   margin: 0 auto 40px;
   padding: 25px;
-  background-color: rgba(255, 255, 255, 0.92);
+  background-color: rgba(255, 251, 243, 0.95);
   border-radius: 20px;
   box-shadow:
-    0 4px 15px rgba(255, 183, 197, 0.2),
-    0 0 0 2px rgba(255, 183, 197, 0.05);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    0 4px 15px rgba(255, 209, 163, 0.2),
+    0 0 0 2px rgba(255, 209, 163, 0.05);
+  transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
   user-select: text;
@@ -33,38 +41,15 @@
   pointer-events: auto;
 }
 
-.post::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, transparent, rgba(255, 183, 197, 0.1));
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.post > * {
-  position: relative;
-  z-index: 1;
-}
-
 .post:hover {
-  border-color: rgba(255, 183, 197, 0.3);
+  transform: translateY(-2px);
   box-shadow:
-    0 6px 20px rgba(255, 183, 197, 0.2),
-    0 0 0 2px rgba(255, 183, 197, 0.1);
-}
-
-.post:hover::before {
-  opacity: 1;
+    0 6px 20px rgba(255, 209, 163, 0.3),
+    0 0 0 2px rgba(255, 209, 163, 0.15);
 }
 
 .post h2 {
-  color: #ff4081;
+  color: #ff8c42;
   margin-bottom: 1rem;
   font-weight: 700;
 }
@@ -75,7 +60,7 @@
 }
 
 .post h2 a:hover {
-  color: #ff6b98;
+  color: #ff6b3d;
 }
 
 .post footer {
@@ -90,9 +75,9 @@
   padding: 6px 14px;
   border-radius: 25px;
   font-size: 0.85rem;
-  color: #ff4081;
-  background: rgba(255, 64, 129, 0.08);
-  border: 3px solid rgba(255, 64, 129, 0.15);
+  color: #ff8c42;
+  background: rgba(255, 140, 66, 0.08);
+  border: 3px solid rgba(255, 140, 66, 0.15);
   transition: background 0.3s ease, box-shadow 0.3s ease, letter-spacing 0.3s ease;
   margin: 0 6px 6px 0;
   position: relative;
@@ -107,7 +92,7 @@
   left: 50%;
   width: 120%;
   height: 120%;
-  background: radial-gradient(circle, rgba(255, 64, 129, 0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 140, 66, 0.15), transparent 70%);
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.3s ease;
@@ -121,10 +106,10 @@
 }
 
 :global(.category-tag:hover) {
-  background: rgba(255, 64, 129, 0.12);
+  background: rgba(255, 140, 66, 0.12);
   box-shadow:
-    0 4px 12px rgba(255, 64, 129, 0.2),
-    0 0 0 2px rgba(255, 64, 129, 0.1);
+    0 4px 12px rgba(255, 140, 66, 0.2),
+    0 0 0 2px rgba(255, 140, 66, 0.1);
   letter-spacing: 0.02em;
 }
 

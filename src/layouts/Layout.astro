@@ -100,7 +100,12 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
         }
       </header>
 
-      <div>
+      <div class="main-container">
+        <aside>
+          <SearchButton />
+          <slot name="aside" />
+        </aside>
+
         <main>
           <div class="content">
             <header>
@@ -153,11 +158,6 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
             </footer>
           </div>
         </main>
-
-        <aside>
-          <SearchButton />
-          <slot name="aside" />
-        </aside>
       </div>
     </div>
 
@@ -175,89 +175,101 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     min-height: 100vh;
   }
 
-  .container > div {
-    display: flex;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 3px;
+  header {
+    margin: 0 -20px;
   }
-  @media (max-width: 640px) {
-    .container > div {
-      display: block;
+
+  .main-container {
+    display: flex;
+    max-width: 1120px;
+    margin: 0 auto;
+    gap: 30px;
+    align-items: flex-start;
+    padding: 0 20px 40px;
+  }
+
+  @media (max-width: 900px) {
+    header {
+      margin: 0 -10px;
+    }
+    .main-container {
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 10px 40px;
     }
   }
 
   main {
     flex: 1;
     order: 2;
-    justify-content: space-between;
+    min-width: 0;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 900px) {
     main {
       order: 1;
+      width: 100%;
     }
   }
 
   aside {
     order: 1;
-    width: 300px;
+    width: 280px;
     padding: 25px 20px;
     background-color: rgba(255, 255, 255, 0.95);
     border-radius: var(--radius);
-    margin: 20px;
-    box-shadow: 0 4px 15px rgba(255, 183, 197, 0.1);
-    border: 3px solid rgba(255, 183, 197, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.1);
+    border: 3px solid rgba(255, 140, 66, 0.2);
+    position: sticky;
+    top: 20px;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 900px) {
     aside {
       order: 2;
       width: 100%;
-      margin: 10px 0;
+      position: static;
     }
   }
 
   div.cover {
     position: relative;
     margin-bottom: 20px;
-  }
-  div.cover::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-    width: 100%;
-    height: 20px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--bg) 100%);
-    z-index: 1;
+    overflow: hidden;
   }
   div.cover img {
     display: block;
     width: 100%;
-    height: 25vh;
+    height: 15vh;
     object-fit: cover;
     object-position: center 60%;
-    border-bottom: 3px solid rgba(255, 183, 197, 0.3);
+    border-bottom: 2px solid rgba(255, 140, 66, 0.3);
   }
   div.content {
     padding: 30px 40px;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.97);
     border-radius: var(--radius);
-    box-shadow: 0 4px 15px rgba(255, 183, 197, 0.15);
-    margin: 20px;
-    border: 3px solid rgba(255, 183, 197, 0.2);
-    max-width: 100%;
+    box-shadow: 
+      0 4px 15px rgba(255, 140, 66, 0.15),
+      0 0 0 3px rgba(255, 140, 66, 0.1);
+    border: 3px solid rgba(255, 140, 66, 0.2);
     overflow-wrap: break-word;
+    position: relative;
+    backdrop-filter: blur(10px);
   }
   @media (max-width: 640px) {
+    div.cover {
+      margin-bottom: 15px;
+    }
+    div.cover img {
+      height: 12vh;
+    }
     div.content {
-      padding: 5px;
-      margin: 10px 0;
-      width: 100%;
+      padding: 20px;
+      border-radius: 8px;
     }
   }
 
   main header {
-    padding: 30px 0 25px;
+    padding: 20px 0 25px;
     text-align: center;
     position: relative;
   }
@@ -267,15 +279,23 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 60%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accents-2), transparent);
-    border-radius: var(--radius);
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 140, 66, 0.6),
+      rgba(255, 140, 66, 0.8),
+      rgba(255, 140, 66, 0.6),
+      transparent
+    );
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(255, 140, 66, 0.2);
   }
   main header h1 {
     font-weight: 700;
     font-size: 2.2rem;
-    color: #ff6b98;
+    color: #ff8c42;
     text-shadow:
       1px 1px 0 #fff,
       -1px -1px 0 #fff,
@@ -346,7 +366,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   }
   @media (max-width: 640px) {
     main footer {
-      margin: 0 auto 30px;
+      margin: 20px 0;
     }
   }
   main footer span {
@@ -365,12 +385,12 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     --gap: 1rem;
     --gap-double: 2rem;
 
-    --bg: #fff5f8;
+    --bg: #fff7e6;
     --fg: #4a4a4a;
-    --accents-1: #ff8fa3;
-    --accents-2: #ffb7c5;
-    --accents-3: #ffd1dc;
-    --accents-4: #ffe4ea;
+    --accents-1: #ff8c42;
+    --accents-2: #ffb347;
+    --accents-3: #ffd1a1;
+    --accents-4: #ffe4c4;
     --geist-foreground: #4a4a4a;
     --geist-success: #95d5b2;
 
@@ -402,20 +422,13 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
 
   body {
     min-height: 100vh;
-    background: linear-gradient(135deg, var(--bg), #fff2f5);
+    background: 
+      linear-gradient(135deg, var(--bg), #fff7e6),
+      url('/src/images/background.jpg') center/cover no-repeat fixed;
     color: var(--fg);
     font-family: var(--font-sans);
-
-    background-image:
-      radial-gradient(rgba(255, 183, 197, 0.12) 1.5px, transparent 1.5px),
-      radial-gradient(rgba(255, 183, 197, 0.12) 1.5px, transparent 1.5px);
-    background-position: 0 0, 25px 25px;
-    background-attachment: fixed;
-    background-size: 50px 50px;
-
-    /* Hack */
+    background-blend-mode: soft-light;
     overflow-x: hidden;
-
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
   }
@@ -445,9 +458,9 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     width: 100%;
     height: 4px;
     background: linear-gradient(90deg,
-      rgba(255, 139, 163, 0.3),
-      rgba(255, 183, 197, 0.6),
-      rgba(255, 139, 163, 0.3)
+      rgba(255, 140, 66, 0.3),
+      rgba(255, 179, 71, 0.6),
+      rgba(255, 140, 66, 0.3)
     );
     border-radius: 4px;
     animation: linkShine 1.5s ease-in-out infinite;
@@ -471,7 +484,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   mark {
     padding: var(--gap-quarter);
     border-radius: var(--radius);
-    background: linear-gradient(120deg, rgba(255, 209, 220, 0.4), rgba(247, 212, 255, 0.4));
+    background: linear-gradient(120deg, rgba(255, 209, 161, 0.4), rgba(255, 227, 196, 0.4));
   }
 
   h1 {
