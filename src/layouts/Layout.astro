@@ -26,23 +26,6 @@ const siteOGImage = new URL(
   Astro.site
 )
 
-let coverImageURL: string | undefined
-if (database.Cover) {
-  const cover = database.Cover as { Type: 'external' | 'file'; Url: string }
-  switch (cover.Type) {
-    case 'external':
-      coverImageURL = cover.Url
-      break
-    case 'file':
-      try {
-        coverImageURL = filePath(new URL(cover.Url))
-      } catch (err) {
-        console.log('Invalid DB cover image URL')
-      }
-      break
-  }
-}
-
 let customIconURL: string | undefined
 if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   if (database.Icon.Type === 'file') {
@@ -90,16 +73,6 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
   <body>
     <GoogleAnalytics trackingId={PUBLIC_GA_TRACKING_ID} />
     <div class="container">
-      <header>
-        {
-          coverImageURL && (
-            <div class="cover">
-              <img src={coverImageURL} alt="Site cover image" loading="lazy" />
-            </div>
-          )
-        }
-      </header>
-
       <div class="main-container">
         <aside>
           <SearchButton />
@@ -175,27 +148,20 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     min-height: 100vh;
   }
 
-  header {
-    margin: 0 -20px;
-  }
-
   .main-container {
     display: flex;
     max-width: 1120px;
     margin: 0 auto;
     gap: 30px;
     align-items: flex-start;
-    padding: 0 20px 40px;
+    padding: 80px 20px 40px;
   }
 
   @media (max-width: 900px) {
-    header {
-      margin: 0 -10px;
-    }
     .main-container {
       flex-direction: column;
       gap: 20px;
-      padding: 0 10px 40px;
+      padding: 80px 10px 40px;
     }
   }
 
@@ -220,7 +186,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     box-shadow: 0 4px 15px rgba(255, 140, 66, 0.1);
     border: 3px solid rgba(255, 140, 66, 0.2);
     position: sticky;
-    top: 20px;
+    top: 80px;
   }
   @media (max-width: 900px) {
     aside {
@@ -229,20 +195,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
       position: static;
     }
   }
-
-  div.cover {
-    position: relative;
-    margin-bottom: 20px;
-    overflow: hidden;
-  }
-  div.cover img {
-    display: block;
-    width: 100%;
-    height: 15vh;
-    object-fit: cover;
-    object-position: center 60%;
-    border-bottom: 2px solid rgba(255, 140, 66, 0.3);
-  }
+  
   div.content {
     padding: 30px 40px;
     background-color: rgba(255, 251, 245, 0.95);
@@ -257,12 +210,6 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     -webkit-backdrop-filter: blur(10px);
   }
   @media (max-width: 640px) {
-    div.cover {
-      margin-bottom: 15px;
-    }
-    div.cover img {
-      height: 12vh;
-    }
     div.content {
       padding: 20px;
       border-radius: 8px;
