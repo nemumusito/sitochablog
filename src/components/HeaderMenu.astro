@@ -84,6 +84,15 @@ import { getNavLink } from '../lib/blog-helpers.ts'
     gap: 1.5rem;
   }
 
+  @media (max-width: 768px) {
+    .menu-items {
+      display: none;
+    }
+    .menu-items.active {
+      display: flex;
+    }
+  }
+
   .menu-left {
     display: flex;
     gap: 1.5rem;
@@ -178,46 +187,57 @@ import { getNavLink } from '../lib/blog-helpers.ts'
       display: block;
     }
 
-    .menu-items {
+    .menu-items.active {
       position: fixed;
       top: var(--header-height);
-      right: -100%;
-      width: 250px;
-      height: calc(100vh - var(--header-height));
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: auto;
       background: rgba(255, 251, 245, 0.98);
       flex-direction: column;
       gap: 0;
-      padding: 20px;
-      transition: right 0.3s ease;
-      border-left: 3px solid rgba(255, 140, 66, 0.2);
-      box-shadow: -2px 0 8px rgba(255, 140, 66, 0.1);
+      padding: 15px;
+      border-bottom: 3px solid rgba(255, 140, 66, 0.2);
+      box-shadow: 0 2px 8px rgba(255, 140, 66, 0.1);
+      animation: slideDown 0.3s ease forwards;
     }
 
     .menu-left {
-      flex-direction: column;
-      gap: 0;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .social-links {
-      margin-top: 20px;
-      padding-top: 20px;
+      margin-top: 15px;
+      padding-top: 15px;
       border-top: 1px solid rgba(255, 140, 66, 0.2);
       justify-content: center;
+      gap: 2rem;
     }
 
-    .menu-items.active {
-      right: 0;
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .menu-link {
       font-size: 1rem;
-      padding: 15px;
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 140, 66, 0.1);
+      padding: 8px 15px;
+      border-radius: 20px;
+      background: rgba(255, 140, 66, 0.1);
     }
 
-    .menu-link:last-child {
-      border-bottom: none;
+    .social-link {
+      font-size: 1.4rem;
     }
   }
 
