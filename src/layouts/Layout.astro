@@ -1,4 +1,15 @@
 ---
+export const prerender = false;
+
+// 全てのページで301リダイレクトを実装
+if (Astro.request.method === 'GET') {
+  // 現在のパスを取得
+  const currentPath = Astro.url.pathname;
+  // 新しいURLを生成（パスを保持）
+  const newURL = `https://blog.sitocha.cc${currentPath}`;
+  return Astro.redirect(newURL, 301);
+}
+
 import { PUBLIC_GA_TRACKING_ID, ENABLE_LIGHTBOX } from '../server-constants.ts'
 import { getDatabase } from '../lib/notion/client.ts'
 import { getNavLink, getStaticFilePath, filePath } from '../lib/blog-helpers.ts'
@@ -45,6 +56,7 @@ if (database.Icon && 'Type' in database.Icon && 'Url' in database.Icon) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="max-image-preview:large" />
     <meta charset="UTF-8" />
+    <link rel="canonical" href={`https://blog.sitocha.cc${path}`} />
     <meta name="generator" content={Astro.generator} />
     <title>{siteTitle}</title>
     <link rel="icon" type="image/x-icon" href="/images/icon.ico" />
