@@ -1,114 +1,60 @@
 ---
-import type { SelectProperty } from '../../../../../lib/interfaces.ts'
-import {
-  getPostsByTagAndPage,
-  getRankedPosts,
-  getAllTags,
-  getNumberOfPagesByTag,
-} from '../../../../../lib/notion/client.ts'
-import Layout from '../../../../../layouts/Layout.astro'
-import NoContents from '../../../../../components/NoContents.astro'
-import PostDate from '../../../../../components/PostDate.astro'
-import PostTags from '../../../../../components/PostTags.astro'
-import PostTitle from '../../../../../components/PostTitle.astro'
-import PostFeaturedImage from '../../../../../components/PostFeaturedImage.astro'
-import PostExcerpt from '../../../../../components/PostExcerpt.astro'
-import ReadMoreLink from '../../../../../components/ReadMoreLink.astro'
-import Pagination from '../../../../../components/Pagination.astro'
-import BlogPostsLink from '../../../../../components/BlogPostsLink.astro'
-import BlogTagsLink from '../../../../../components/BlogTagsLink.astro'
-import styles from '../../../../../styles/blog.module.css'
-import '../../../../../styles/notion-color.css'
-
 export async function getStaticPaths() {
-  const allTags = await getAllTags()
-
-  let params = []
-
-  await Promise.all(
-    allTags.map((tag: SelectProperty) => {
-      return getNumberOfPagesByTag(tag.name).then((numberOfPages: number) => {
-        for (let i = 2; i <= numberOfPages; i++) {
-          params.push({ params: { tag: tag.name, page: i.toString() } })
-        }
-      })
-    })
-  )
-
-  return params
+  return [];
 }
 
-const { tag, page } = Astro.params
-
-const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
-  getPostsByTagAndPage(tag, parseInt(page, 10)),
-  getRankedPosts(),
-  getAllTags(),
-  getNumberOfPagesByTag(tag),
-])
-
-const currentTag = posts[0].Tags.find((t) => t.name === tag)
+export const getStaticPathsFallback = 'redirect';
 ---
 
-<Layout
-  title={`Posts in ${tag} ${page}/${numberOfPages}`}
-  path={`/posts/tag/${tag}/page/${page}`}
->
-  <div slot="main" class={styles.main}>
-    <header>
-      <div class="tag-container">
-        <span class={`tag ${currentTag.color}`}>{tag}</span>
-        {page}/{numberOfPages}
-      </div>
-    </header>
-
-    {
-      posts.length === 0 ? (
-        <NoContents contents={posts} />
-      ) : (
-        posts.map((post) => (
-          <div class={styles.post} key={post.Slug}>
-            <PostDate post={post} />
-            <PostTags post={post} />
-            <PostTitle post={post} />
-            <PostFeaturedImage post={post} />
-            <PostExcerpt post={post} />
-            <ReadMoreLink post={post} />
-          </div>
-        ))
-      )
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ブログ移設のお知らせ</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href={`https://blog.sitocha.cc/posts/tag/${tag}/page/${page}`} />
+  <script define:vars={{ tag, page }}>
+    window.location.href = `https://blog.sitocha.cc/posts/tag/${tag}/page/${page}`;
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fff7e6;
+      margin: 0;
+      padding: 20px;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    <footer>
-      <Pagination
-        tag={tag}
-        currentPage={parseInt(page, 10)}
-        numberOfPages={numberOfPages}
-      />
-    </footer>
-  </div>
-
-  <div slot="aside" class={styles.aside}>
-    <BlogPostsLink heading="おすすめの記事" posts={rankedPosts} />
-    <BlogTagsLink heading="カテゴリー" tags={tags} />
-  </div>
-</Layout>
-
-<style>
-  .tag-container {
-    margin: 0;
-    line-height: 1.3;
-    font-size: 1.2rem;
-    font-weight: normal;
-  }
-  @media (max-width: 640px) {
-    .tag-container {
-      font-size: 1.15rem;
+    .message {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 600px;
     }
-  }
-  .tag-container span.tag {
-    border-radius: 4px;
-    padding: 3px 9px;
-    background: var(--tag-bg-light-gray);
-  }
-</style>
+    h1 {
+      color: #333;
+      font-size: 1.5rem;
+      margin: 0 0 1rem;
+    }
+    p {
+      color: #666;
+      margin: 0;
+    }
+    a {
+      color: #ff8c42;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="message">
+    <h1>このブログは移設されました</h1>
+    <p>新しいURLは <a href={`https://blog.sitocha.cc/posts/tag/${tag}/page/${page}`}>blog.sitocha.cc</a> です</p>
+  </div>
+</body>
+</html>

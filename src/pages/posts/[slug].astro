@@ -1,127 +1,60 @@
 ---
-import * as interfaces from '../../lib/interfaces.ts'
-import {
-  getPosts,
-  getAllPosts,
-  getRankedPosts,
-  getPostBySlug,
-  getPostsByTag,
-  getBlock,
-  getAllTags,
-  getAllBlocksByBlockId,
-  downloadFile,
-} from '../../lib/notion/client.ts'
-import {
-  getPostLink,
-  filePath,
-  extractTargetBlocks,
-} from '../../lib/blog-helpers.ts'
-import Layout from '../../layouts/Layout.astro'
-import PostDate from '../../components/PostDate.astro'
-import PostTags from '../../components/PostTags.astro'
-import PostTitle from '../../components/PostTitle.astro'
-import PostBody from '../../components/PostBody.astro'
-import PostRelativeLink from '../../components/PostRelativeLink.astro'
-import BlogPostsLink from '../../components/BlogPostsLink.astro'
-import BlogTagsLink from '../../components/BlogTagsLink.astro'
-import styles from '../../styles/blog.module.css'
-
 export async function getStaticPaths() {
-  const posts = await getAllPosts()
-  return posts.map((post: interfaces.Post) => ({ params: { slug: post.Slug } }))
+  return [];
 }
 
-const { slug } = Astro.params
-
-const post = await getPostBySlug(slug)
-if (!post) {
-  throw new Error('Post not found. slug: ${slug}')
-}
-
-const [blocks, allPosts, rankedPosts, recentPosts, tags, postsHavingSameTag] =
-  await Promise.all([
-    getAllBlocksByBlockId(post.PageId),
-    getAllPosts(),
-    getRankedPosts(),
-    getPosts(5),
-    getAllTags(),
-    getPostsByTag(post.Tags[0]?.name, 6),
-  ])
-
-const fileAtacchedBlocks = extractTargetBlocks('image', blocks)
-  .concat(extractTargetBlocks('file', blocks))
-  .filter((block) => {
-    if (!block) {
-      return false
-    }
-    const imageOrFile = block.Image || block.File
-    return imageOrFile && imageOrFile.File && imageOrFile.File.Url
-  })
-
-// Download files
-await Promise.all(
-  fileAtacchedBlocks
-    .map(async (block) => {
-      const expiryTime = (block.Image || block.File).File.ExpiryTime
-      if (Date.parse(expiryTime) > Date.now()) {
-        return Promise.resolve(block)
-      }
-      return getBlock(block.Id)
-    })
-    .map((promise) =>
-      promise.then((block) => {
-        let url!: URL
-        try {
-          url = new URL((block.Image || block.File).File.Url)
-        } catch (err) {
-          console.log('Invalid file URL')
-          return Promise.reject()
-        }
-        return Promise.resolve(url)
-      })
-    )
-    .map((promise) => promise.then(downloadFile))
-)
-
-const currentPostIndex = allPosts.findIndex((post) => post.Slug === slug)
-const prevPost = allPosts[currentPostIndex + 1]
-const nextPost = allPosts[currentPostIndex - 1]
-
-let ogImage = ''
-if (post.FeaturedImage && post.FeaturedImage.Url) {
-  ogImage = new URL(filePath(new URL(post.FeaturedImage.Url)), Astro.site)
-}
+export const getStaticPathsFallback = 'redirect';
 ---
 
-<Layout
-  title={post.Title}
-  description={post.Excerpt}
-  path={getPostLink(post.Slug)}
-  ogImage={ogImage}
->
-  <div slot="main" class={styles.main}>
-    <div class={styles.post}>
-      <PostDate post={post} />
-      <PostTags post={post} />
-      <PostTitle post={post} enableLink={false} />
-      <PostBody blocks={blocks} />
-      <PostTags post={post} />
-
-      <footer>
-        <PostRelativeLink prevPost={prevPost} nextPost={nextPost} />
-      </footer>
-    </div>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ブログ移設のお知らせ</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href={`https://blog.sitocha.cc/posts/${slug}`} />
+  <script define:vars={{ slug }}>
+    window.location.href = `https://blog.sitocha.cc/posts/${slug}`;
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fff7e6;
+      margin: 0;
+      padding: 20px;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .message {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 600px;
+    }
+    h1 {
+      color: #333;
+      font-size: 1.5rem;
+      margin: 0 0 1rem;
+    }
+    p {
+      color: #666;
+      margin: 0;
+    }
+    a {
+      color: #ff8c42;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="message">
+    <h1>このブログは移設されました</h1>
+    <p>新しいURLは <a href={`https://blog.sitocha.cc/posts/${slug}`}>blog.sitocha.cc</a> です</p>
   </div>
-
-  <div slot="aside" class="aside">
-    <BlogPostsLink
-      heading="同じカテゴリーの記事"
-      posts={postsHavingSameTag.filter(
-        (p: interfaces.Post) => p.Slug !== post.Slug
-      )}
-    />
-    <BlogPostsLink heading="おすすめの記事" posts={rankedPosts} />
-    <BlogPostsLink heading="最新の記事" posts={recentPosts} />
-    <BlogTagsLink heading="カテゴリー" tags={tags} />
-  </div>
-</Layout>
+</body>
+</html>
