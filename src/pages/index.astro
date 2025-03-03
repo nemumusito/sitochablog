@@ -29,6 +29,11 @@ const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
 
 <Layout>
   <div slot="main" class={styles.main}>
+    <div style="background-color: #f5f5f5; padding: 2rem; margin-bottom: 2rem; text-align: center; border: 1px solid #ddd; border-radius: 8px;">
+      <h2 style="margin: 0; color: #333; font-size: 1.5rem;">
+        このブログは <a href="https://blog.sitocha.cc" style="color: #0066cc; text-decoration: underline;">blog.sitocha.cc</a> に移設されました
+      </h2>
+    </div>
     {
       posts.length === 0 ? (
         <NoContents contents={posts} />
